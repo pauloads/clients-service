@@ -1,22 +1,30 @@
 package com.paulocorrea.clients.entity;
 
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document("clients")
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+
+@Entity
 @Data
 public class Client {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    @NotNull
     private String name;
+
+    @NotNull
+    private String document;
 
     private String address;
 
-    private String birthDate;
+    private LocalDate birthDate;
 
-    private String deleted;
+    @NotNull
+    private boolean deleted;
 
 }

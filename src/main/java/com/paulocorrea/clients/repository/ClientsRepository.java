@@ -1,4 +1,8 @@
 package com.paulocorrea.clients.repository;
 
-public interface ClientsRepository {
+import com.paulocorrea.clients.entity.Client;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ClientsRepository extends JpaRepository<Client, Long> {
+
 }
