@@ -6,20 +6,16 @@ import com.paulocorrea.clients.controller.mapper.ClientMapper;
 import com.paulocorrea.clients.entity.Client;
 import com.paulocorrea.clients.exception.ClientNotFoundException;
 import com.paulocorrea.clients.repository.ClientsRepository;
-import com.paulocorrea.clients.repository.specification.SearchCriteria;
+import com.paulocorrea.clients.repository.specification.ClientSpecificationBuilder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.time.LocalDate;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.springframework.beans.BeanUtils.copyProperties;
 
 @Service
@@ -46,16 +42,29 @@ public class ClientsService {
         return clientToUpdate;
     }
 
-    public Page<ClientResponse> listPaginated(Pageable pageable, Map<String, Object> searchArgs) {
+    public Page<ClientResponse> listPaginated(Pageable pageable, final String name, final String document,
+                                              final LocalDate birthDate) {
 
-        List<SearchCriteria> criterias = searchArgs
-                .entrySet()
-                .stream()
-                .map(entry -> new SearchCriteria(entry.getKey(), entry.getValue()))
-                .collect(Collectors.toList());
+        var builder = new ClientSpecificationBuilder();
 
-        Specification<Client> specification =
-        var clientEntityPage = repository.findAll(pageable);
-        return clientEntityPage.map(mapper::fromEntityToOutput);
+        if (!isEmpty(name)) {
+            builder.with("name", name);
+        }
+        if (!isEmpty(document)) {
+            builder.with("document", document);
+        }
+        if (birthDate != null) {
+            builder.with("birthDate", birthDate);
+        }
+
+        Page<Client> clientPage = Page.empty();
+        if (builder.hasValue()) {
+            Specification<Client> specification = builder.build();
+            clientPage = repository.findAll(specification, pageable);
+        } else {
+            clientPage = repository.findAll(pageable);
+        }
+
+        return clientPage.map(mapper::fromEntityToOutput);
     }
 }

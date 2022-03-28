@@ -17,4 +17,6 @@ public class ClientResponse {
 
     private LocalDate birthDate;
 
+    private int age;
+
 }

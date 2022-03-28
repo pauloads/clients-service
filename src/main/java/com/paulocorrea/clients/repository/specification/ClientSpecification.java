@@ -12,6 +12,10 @@ public class ClientSpecification implements Specification<Client> {
 
     private SearchCriteria criteria;
 
+    public ClientSpecification(SearchCriteria criteria) {
+        this.criteria = criteria;
+    }
+
     @Override
     public Predicate toPredicate(Root<Client> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
         if (root.get(criteria.getKey()).getJavaType() == String.class) {

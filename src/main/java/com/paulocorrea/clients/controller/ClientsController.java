@@ -3,17 +3,22 @@ package com.paulocorrea.clients.controller;
 import com.paulocorrea.clients.controller.dto.ClientRequest;
 import com.paulocorrea.clients.controller.dto.ClientResponse;
 import com.paulocorrea.clients.controller.mapper.ClientMapper;
-import com.paulocorrea.clients.repository.specification.SearchCriteria;
 import com.paulocorrea.clients.service.ClientsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.LocalDate;
-import java.util.Map;
 
 import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.ok;
@@ -55,10 +60,6 @@ public class ClientsController {
                                                      @RequestParam(required = false) String name,
                                                      @RequestParam(required = false) String document,
                                                      @RequestParam(required = false) LocalDate birthDate) {
-        var searchArgs = Map.of(
-                "name", name,
-                "document", document,
-                "birthDate", birthDate) ;
-        return ok(service.listPaginated(pageable, searchArgs));
+        return ok(service.listPaginated(pageable, name, document, birthDate));
     }
 }
