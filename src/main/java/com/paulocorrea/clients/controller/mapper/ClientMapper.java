@@ -3,10 +3,11 @@ package com.paulocorrea.clients.controller.mapper;
 import com.paulocorrea.clients.controller.dto.ClientRequest;
 import com.paulocorrea.clients.controller.dto.ClientResponse;
 import com.paulocorrea.clients.entity.Client;
+import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface ClientMapper {
 
     ClientMapper INSTANCE = Mappers.getMapper(ClientMapper.class);
